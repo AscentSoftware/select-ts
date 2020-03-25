@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "target": "es2015",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": ["es2015"],
+    "declarationMap": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "exclude": ["src/**/*.spec.ts", "lib/**/*"]
+}
