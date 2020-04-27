@@ -4,7 +4,9 @@
 
 This package offers a set of "conditional" combinators to implement behaviors of type "if this condition is true, then do that". They are re-usable with different functional data structures (e.g. `Task`, `Option` and so on).
 
-# Motivating example
+# Motivating examples
+
+## Ramda-like conditional operators
 
 Let's assume that we have a serverless function that processes some commands. Depending on the kind of command, we need to perform different tasks.
 
@@ -39,6 +41,30 @@ const result = await runTask();
 // the result has type Option<Response>
 // meaning that it might be a Response or None if there is no match
 // in this way we can easily pipe runTask with other tasks
+```
+
+## Cleaner fp-ts code
+
+When a task can return an `Option`, the next action depends if the value is `none` or `some`.
+This is a common use case, for example you want to verify if a user exists before performing an action.
+
+A possible implementation with `pipe` is the following.
+
+```typescript
+pipe(
+  getUser, // returns a `Task<Option<string>>`
+  map(fold(getError, sayHello)), // inspects the task and unfold `Option`
+);
+```
+
+Using this library, the `Option` unfolding is handled by the `ifSomeS` combinator resulting in a cleaner code (i.e. more imperative 😜).
+
+```typescript
+ifSomeS(
+  getUser, // returns a `Task<Option<string>>`
+  sayHelloTask, // has type `Task<string => string>`
+  getErrorTask, // has type `Task<() => string>`
+);
 ```
 
 ## Contributing
