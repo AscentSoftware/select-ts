@@ -12,18 +12,17 @@ import { Selective1 } from './Selective';
  * @param fa a default value
  * @param fma an optional value
  */
-export const fromOption = <S extends URIS>(S: Selective1<S>) => <A>(
-  fa: Kind<S, A>,
-  fma: Kind<S, Option<A>>,
-): Kind<S, A> => {
-  return S.select(
-    S.map(
-      fma,
-      fold(
-        () => left<void, A>(undefined),
-        b => right<void, A>(b),
+export function fromOption<S extends URIS>(S: Selective1<S>) {
+  return <A>(fa: Kind<S, A>, fma: Kind<S, Option<A>>): Kind<S, A> => {
+    return S.select(
+      S.map(
+        fma,
+        fold(
+          () => left<void, A>(undefined),
+          b => right<void, A>(b),
+        ),
       ),
-    ),
-    S.map(fa, b => (_nothing: void) => b),
-  );
-};
+      S.map(fa, b => (_nothing: void) => b),
+    );
+  };
+}

@@ -17,20 +17,22 @@ import { branch } from './branch';
  * @param hasSome effect to execute if some
  * @param hasNone effect to execute if none
  */
-export const ifSome = <S extends URIS>(S: Selective1<S>) => <A, B>(
-  cond: Kind<S, Option<A>>,
-  hasSome: Kind<S, (a: A) => B>,
-  hasNone: Kind<S, (b: void) => B>,
-): Kind<S, B> => {
-  const branchS = branch(S);
-  const selector = S.map(cond, a =>
-    pipe(
-      a,
-      fold(
-        () => left(undefined as void),
-        a => right(a),
+export function ifSome<S extends URIS>(S: Selective1<S>) {
+  return <A, B>(
+    cond: Kind<S, Option<A>>,
+    hasSome: Kind<S, (a: A) => B>,
+    hasNone: Kind<S, (b: void) => B>,
+  ): Kind<S, B> => {
+    const branchS = branch(S);
+    const selector = S.map(cond, a =>
+      pipe(
+        a,
+        fold(
+          () => left(undefined as void),
+          a => right(a),
+        ),
       ),
-    ),
-  );
-  return branchS<void, A, B>(selector)(hasNone)(hasSome);
-};
+    );
+    return branchS<void, A, B>(selector)(hasNone)(hasSome);
+  };
+}
